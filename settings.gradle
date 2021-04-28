@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "aop-p2c02-lotto"
