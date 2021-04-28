@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.numberPicker)
     }
 
-    private val numberTextViewList: List<TextView> by lazy{
+    private val numberTextViewList: List<TextView> by lazy {
         listOf<TextView>(
             findViewById<TextView>(R.id.textView1),
             findViewById<TextView>(R.id.textView2),
@@ -69,12 +69,12 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (pickNumberSet.size >= 5){
+            if (pickNumberSet.size >= 5) {
                 Toast.makeText(this, "번호는 5개 까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (pickNumberSet.contains(numberPicker.value)){
+            if (pickNumberSet.contains(numberPicker.value)) {
                 Toast.makeText(this, "이미 선택한 번호 입니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
