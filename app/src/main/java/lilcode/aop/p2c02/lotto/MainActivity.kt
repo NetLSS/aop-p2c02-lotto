@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             val list = getRandomNumber() // 사용자가 선택한 번호를 포함한 6개 로또 번호 가져오기
 
             // 인덱스와 값을 사용 하기위해 forEachIndexed
-            list.forEachIndexed{ index, number ->
+            list.forEachIndexed { index, number ->
                 val textView = numberTextViewList[index]
 
                 textView.text = number.toString()
@@ -109,9 +109,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     // 중복을 피하기 위해 함수로 따로 빼서 작성
-    private fun setNumberBackground(number: Int, textView: TextView){
+    private fun setNumberBackground(number: Int, textView: TextView) {
         // number 별 해당하는 배경 설정 drawable 자원 사용
-        when(number){
+        when (number) {
             in 1..10 ->
                 textView.background = ContextCompat.getDrawable(this, R.drawable.circle_yellow)
             in 11..20 ->
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
             for (i in 1..45) {
 
                 // 이미 선택된 번호일 경우 skip
-                if (pickNumberSet.contains(i)){
+                if (pickNumberSet.contains(i)) {
                     continue
                 }
 
@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
     private fun initClearButton() {
         clearButton.setOnClickListener {
             pickNumberSet.clear()
-            numberTextViewList.forEach{
+            numberTextViewList.forEach {
                 it.isVisible = false
             }
             didRun = false
