@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.numberPicker)
     }
 
+    // 추출 된 로또 번호 6개를 나타낼 텍스트뷰
     private val numberTextViewList: List<TextView> by lazy {
         listOf<TextView>(
             findViewById<TextView>(R.id.textView1),
@@ -38,25 +39,37 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private var didRun = false
+    private var didRun = false // 자동 생성 버튼을 최종적으로 누른 경우 true
 
-    private val pickNumberSet = hashSetOf<Int>()
+    private val pickNumberSet = hashSetOf<Int>() // 사용자가 선택한 번호 set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
+        // 숫자 선택기 범위 설정 (로또 번호 범위로 설정)
         numberPicker.minValue = 1
         numberPicker.maxValue = 45
 
         initRunButton()
         initAddButton()
+        initClearButton()
     }
 
+    // 자동 생성 시작 버튼 초기화
     private fun initRunButton() {
         runButton.setOnClickListener {
-            val list = getRandomNumber()
+            didRun = true
+            val list = getRandomNumber() // 사용자가 선택한 번호를 포함한 6개 로또 번호 가져오기
 
+            // 인덱스와 값을 사용 하기위해 forEachIndexed
+            list.forEachIndexed{ index, number ->
+                val textView = numberTextViewList[index]
+
+                textView.text = number.toString()
+                textView.isVisible = true
+            }
             Log.d("MainActivity", list.toString())
         }
     }
@@ -79,25 +92,43 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val textView = numberTextViewList[pickNumberSet.size]
+            val textView = numberTextViewList[pickNumberSet.size] // 다음 으로 추가될 텍스트 뷰
             textView.isVisible = true
             textView.text = numberPicker.value.toString()
 
-            pickNumberSet.add(numberPicker.value)
+            pickNumberSet.add(numberPicker.value) // 선택한 번호 set에 추가
         }
     }
 
     private fun getRandomNumber(): List<Int> {
         val numberList = mutableListOf<Int>().apply {
             for (i in 1..45) {
+
+                // 이미 선택된 번호일 경우 skip
+                if (pickNumberSet.contains(i)){
+                    continue
+                }
+
                 this.add(i)
             }
-            shuffle()
+            shuffle() // 랜덤으로 셔플
         }
 
-        val newList = numberList.subList(0, 6)
+        // 선택한 셋 + 랜덤 번호가 합쳐져서 6개가 되도록 함
+        val newList = pickNumberSet.toList() + numberList.subList(0, 6 - pickNumberSet.size)
 
-        return newList.sorted()
+        return newList.sorted() // 오름차순으로 정렬하여 반환
+    }
+
+    // 초기화 버튼 초기화
+    private fun initClearButton() {
+        clearButton.setOnClickListener {
+            pickNumberSet.clear()
+            numberTextViewList.forEach{
+                it.isVisible = false
+            }
+            didRun = false
+        }
     }
 
 }
