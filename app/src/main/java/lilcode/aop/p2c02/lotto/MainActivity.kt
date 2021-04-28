@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 
 class MainActivity : AppCompatActivity() {
@@ -69,8 +70,9 @@ class MainActivity : AppCompatActivity() {
 
                 textView.text = number.toString()
                 textView.isVisible = true
+
+                setNumberBackground(number, textView)
             }
-            Log.d("MainActivity", list.toString())
         }
     }
 
@@ -96,7 +98,30 @@ class MainActivity : AppCompatActivity() {
             textView.isVisible = true
             textView.text = numberPicker.value.toString()
 
+            // 코틀린이라 setBackground 사용 말고 이렇게 사용가능
+            // drawable 이 안드로이드 앱에 저장되는 것이기 때문에 Context에서 가져오는 것이 필요
+            textView.background = ContextCompat.getDrawable(this, R.drawable.circle_blue)
+
+            setNumberBackground(numberPicker.value, textView)
+
             pickNumberSet.add(numberPicker.value) // 선택한 번호 set에 추가
+        }
+    }
+
+    // 중복을 피하기 위해 함수로 따로 빼서 작성
+    private fun setNumberBackground(number: Int, textView: TextView){
+        // number 별 해당하는 배경 설정 drawable 자원 사용
+        when(number){
+            in 1..10 ->
+                textView.background = ContextCompat.getDrawable(this, R.drawable.circle_yellow)
+            in 11..20 ->
+                textView.background = ContextCompat.getDrawable(this, R.drawable.circle_blue)
+            in 21..30 ->
+                textView.background = ContextCompat.getDrawable(this, R.drawable.circle_red)
+            in 31..40 ->
+                textView.background = ContextCompat.getDrawable(this, R.drawable.circle_gray)
+            else ->
+                textView.background = ContextCompat.getDrawable(this, R.drawable.circle_green)
         }
     }
 
